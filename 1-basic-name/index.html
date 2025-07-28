@@ -29,14 +29,14 @@
       <h2>Results:</h2>
       <ul>
         <li><strong>Combined text:</strong> {{ fullText }}</li>
-        <li><strong>Text length:</strong> </li>
-        <li><strong>Even length?:</strong> </li>
-        <li><strong>Contains all vowels?:</strong> </li>
+        <li><strong>Text length:</strong> {{textLength}} </li>
+        <li><strong>Even length?:</strong> {{isEvenLength}}</li>
+        <li><strong>Contains all vowels?:</strong> {{containsAllVowels}}</li>
       </ul>
     </section>
   </main>
 
-  <script>
+    <script type="module">
     const { createApp, ref, computed } = Vue
 
     createApp({
@@ -45,11 +45,20 @@
         const lastName = ref('')
 
         const fullText = computed(() => `${firstName.value} ${lastName.value}`.trim())
+        const textLength = computed(() => fullText.value.length)
+        const isEvenLength = computed(() => (textLength.value % 2 === 0)? 'Yes': 'No')
+        const containsAllVowels = computed(() => {
+          const vowels = ['a', 'e', 'i', 'o', 'u']
+          return vowels.every(vowel => fullText.value.includes(vowel))? 'Yes': 'No'
+        })
 
         return {
           firstName,
           lastName,
-          fullText
+          fullText,
+          textLength,
+          isEvenLength,
+          containsAllVowels
         }
       },
     }).mount('#app')
